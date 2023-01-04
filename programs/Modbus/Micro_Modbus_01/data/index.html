@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ESP32 Modbus RTU Master</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="data:,">
+    <script src="\jquery.min.js"></script>
+	<!--<link rel="stylesheet" type="text/css" href="\modbusweb.css">-->
+
+    <!--<script src="E:\ProStartIoT\Programs\eNtroL\eNtroL_Modbus_01\data\jquery.min.js"></script>
+    -->
+    <style> 
+    	.header{
+            border-bottom: outset;
+            border-bottom-color: grey;
+            width: 100%;
+            margin-bottom: 1%;
+            
+        }
+        .titleHeading{
+            margin-left: 25%;
+            margin-bottom: 10%;
+            font-size: 60px;
+            font-weight: bold;
+            color: #bdb600;
+        }
+        #infoBox{
+        	//border: 2px solid rgba(0, 0, 0, 1);
+        	width: 30%;
+        	height: 199px;
+        	float: left;
+        	margin-left: 1.5%;
+        }
+        #info{
+        	border: 1px solid #167F92;
+        }
+        #info p{
+        	margin-left: 2%;
+        	font-weight: bold;
+        }
+        #fc01{
+        	//border: 2px solid rgba(0, 0, 0, 1);
+        	width: 30%;
+        	height: 199px;
+        	float: left;
+        	margin-left: 3%;
+        }
+        #fc02{
+        	//border: 2px solid rgba(0, 0, 0, 1);
+        	width: 30%;
+        	height: 199px;
+        	float: left;
+        	margin-left: 3%;
+        }
+        
+        #fc03{
+        	//border: 2px solid rgba(0, 0, 0, 1);
+        	width: 30%;
+        	height: 199px;
+        	float: left;
+        	margin-left: 1.5%;
+        	margin-top: 2%;
+        }
+        #fc04{
+        	//border: 2px solid rgba(0, 0, 0, 1);
+        	width: 30%;
+        	height: 199px;
+        	float: left;
+        	margin-left: 3%;
+        	margin-top: 2%;
+
+        }
+        #fc05{
+        	//border: 2px solid rgba(0, 0, 0, 1);
+        	width: 30%;
+        	height: 199px;
+        	float: left;
+        	margin-left: 3%;
+        	margin-top: 2%;
+
+        }
+         #fc06{
+        	//border: 2px solid rgba(0, 0, 0, 1);
+        	width: 30%;
+        	height: 199px;
+        	float: left;
+        	margin-left: 1.5%;
+        	margin-top: 2%;
+        }
+        #fc15{
+        	//border: 2px solid rgba(0, 0, 0, 1);
+        	width: 30%;
+        	height: 199px;
+        	float: left;
+        	margin-left: 3%;
+        	margin-top: 2%;
+
+        }
+        #fc16{
+        	//border: 2px solid rgba(0, 0, 0, 1);
+        	width: 30%;
+        	height: 199px;
+        	float: left;
+        	margin-left: 3%;
+        	margin-top: 2%;
+
+        }
+        #infoBox label{
+        	margin-left: 38%;
+        	font-weight: bolder;
+        	font-size: 22px;
+        	color: #3333ff;
+        }
+        #fc01 label{
+        	margin-left: 15%;
+        	font-weight: bolder;
+        	font-size: 20px;
+        	color: #3333ff;
+        }
+        #fc02 label{
+        	margin-left: 15%;
+        	font-weight: bolder;
+        	font-size: 20px;
+        	color: #3333ff;
+        }
+        #fc03 label{
+        	margin-left: 10%;
+        	font-weight: bolder;
+        	font-size: 20px;
+        	color: #3333ff;
+        }
+        #fc04 label{
+        	margin-left: 12%;
+        	font-weight: bolder;
+        	font-size: 20px;
+        	color: #3333ff;
+        }
+        #fc05 label{
+        	margin-left: 22%;
+        	font-weight: bolder;
+        	font-size: 20px;
+        	color: #FA160A;
+        }
+        #fc06 label{
+        	margin-left: 15%;
+        	font-weight: bolder;
+        	font-size: 20px;
+        	color: #FA160A;
+        }
+        #fc15 label{
+        	margin-left: 12%;
+        	font-weight: bolder;
+        	font-size: 20px;
+        	color: #FA160A;
+        }
+        #fc16 label{
+        	margin-left: 10%;
+        	font-weight: bolder;
+        	font-size: 20px;
+        	color: #FA160A;
+        }
+       
+       table, th, td { 
+            border: 1px solid #167F92; 
+           	
+        } 
+        table{
+            width: 100%;
+            height: 80%;
+            margin-bottom: 5%;
+        }
+        td{
+        	text-align: center;
+        	color: #003d3d;
+        	font-weight: bolder;
+        }
+        th{
+        	color: #FFF;
+        	background-color: #167F92;
+        }
+        
+        	tr:nth-child(odd) { 
+         background-color: #EAF3F3;
+        } 
+        
+        .button{
+        	color: #003d3d;
+        	display: inline-block;
+    background-color: #008CBA;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 4px 10px;
+    text-decoration: none;
+    font-size: 15px;
+    margin: 2px;
+    cursor: pointer;
+        }
+        option{
+        	color: #003d3d;
+        }
+        select{
+        	color: #003d3d;
+        }
+        p{
+        	color: #003d3d;
+        }
+
+
+        @media only screen and (max-width: 800px){
+	        .header{
+	            margin-bottom: 3%;
+	        }
+	        .titleHeading {
+	            width: 15%;
+	            margin-left: 12%;
+	            font-size: 25px;
+	        }
+	        td{
+        	text-align: center;
+        	}
+        	#infoBox label,#fc01 label,#fc02 label,#fc03 label,#fc04 label,#fc05 label,#fc06 label,#fc15 label,#fc16 label{
+	        	margin-left: 0%;
+	        	font-weight: bolder;
+	        	font-size: 12px;
+        	}	
+        	#info p{
+	        	margin-left: 0%;
+	        	font-weight: bold;
+	        	font-size: 12px;
+        	}
+        	 #infoBox,#fc01,#fc02,#fc03,#fc04,#fc05,#fc15{
+	        	//border: 2px solid rgba(0, 0, 0, 1);
+	        	width: 90%;
+	        	height: 199px;
+	        	margin-left: 0%;
+			}
+			#fc06{
+				width: 90%;
+				height: 199px;
+	        	margin-left: 0%;
+			}
+			#fc16{
+	        	//border: 2px solid rgba(0, 0, 0, 1);
+	        	width: 90%;
+	        	height: 199px;
+	        	margin-left: 0%;
+			}
+			
+	    }
+
+     
+    </style>
+</head>
+<body>
+		<div class="main">
+			<div class="header">
+				<span  class="titleHeading"> ESP32 Modbus RTU Master </span>
+			</div><br>
+			<div class="firstRow">
+				<div id="infoBox">
+					<label>Last Activity Info</label><br><br>
+					<div id="info">	
+					    <p>fun code:<strong id="lastfunccode"></strong></p>
+					    <p>command:<strong id="lastcommand"></strong></p>
+					    <p>Respose:<strong id="lastresponse"></strong></p>
+					    <p>Error:<strong id="lasterror"></strong></p>
+					</div>
+				</div>
+				<div id="fc01">
+					<label>Read Coil Status (FC=01) <button id = "coilstatusbutton" class="button">Get</button></label>
+					<br><br>
+					<table class="responstable"> 
+       					<tr> 
+				            <th>Bit</th> 
+				            <th>Value</th>  
+				        </tr> 
+				        <tr> 
+				            <td>1</td> 
+				            <td id = "coilbit1">-</td> 
+				        </tr> 
+				        <tr> 
+				            <td>2</td> 
+				            <td id = "coilbit2">-</td>
+				        </tr> 
+				        <tr> 
+				            <td>3</td> 
+				            <td id = "coilbit3">-</td>
+						</tr> 
+						<tr> 
+				            <td>4</td> 
+				            <td id = "coilbit4">-</td>
+						</tr> 
+					</table>
+				</div>
+
+				<div id="fc02">
+					<label>Read Input Status (FC=02) <button id = "inputstatusbutton" class="button">Get</button></label>
+					<br><br>
+					<table class="responstable"> 
+				        <tr> 
+				            <th>Bit</th> 
+				            <th>Value</th>  
+				        </tr> 
+				        <tr> 
+				            <td>1</td> 
+				            <td id = "statusbit1">-</td> 
+				        </tr> 
+				        <tr> 
+				            <td>2</td> 
+				            <td id = "statusbit2">-</td>
+				        </tr> 
+				        <tr> 
+				            <td>3</td> 
+				            <td id = "statusbit3">-</td>
+						</tr> 
+						<tr> 
+				            <td>4</td> 
+				            <td id = "statusbit4">-</td>
+						</tr> 
+					</table>
+				</div>
+			</div><br><br>
+
+			<div class="secondRow">
+				<div id="fc03">
+					<label>Read Holding Registers (FC=03) <button id = "holdingregbutton" class="button">Get</button></label><br><br>
+					
+					<table class="responstable"> 
+				        <tr> 
+				            <th>Register</th> 
+				            <th>Value</th>  
+				        </tr> 
+				        <tr> 
+				            <td>1</td> 
+				            <td id = "holdingreg1">-</td> 
+				        </tr> 
+				        <tr> 
+				            <td>2</td> 
+				            <td id = "holdingreg2">-</td>
+				        </tr> 
+				        <tr> 
+				            <td>3</td> 
+				            <td id = "holdingreg3">-</td>
+						</tr> 
+						<tr> 
+				            <td>4</td> 
+				            <td id = "holdingreg4">-</td>
+				        </tr> 
+					</table> 
+				</div>
+
+				<div id="fc04">
+					<label>Read Input Registers (FC=04) <button id = "inputregbutton" class="button">Get</button></label>
+					<br><br>
+					<table class="responstable"> 
+				        <tr> 
+				            <th>Register</th> 
+				            <th>Value</th>  
+				        </tr> 
+				        <tr> 
+				            <td>1</td> 
+				            <td id = "inputreg1">-</td> 
+				        </tr> 
+				        <tr> 
+				            <td>2</td> 
+				            <td id = "inputreg2">-</td>
+				        </tr> 
+				        <tr> 
+				            <td>3</td> 
+				            <td id = "inputreg3">-</td>
+						</tr> 
+						<tr> 
+				            <td>4</td> 
+				            <td id = "inputreg4">-</td>
+				        </tr> 
+					</table>
+				</div>
+
+				<div id="fc05"> 
+					<label>Force Single Coil (FC=05) </label><br><br>
+					
+					<table class="responstable"> 
+				        <tr> 
+				            <th>Bit</th> 
+				            <th>Value</th>  
+				        </tr> 
+				        <tr> 
+				            <td>1</td> 
+				            <td id = "fcoilbit1">
+								<select id="fcoil1select">        
+									<option value="1" >ON</option>
+									<option value="0">OFF</option>
+								</select>
+								<button id = "fcoilbit1button" class="button">Set</button>
+							</td>
+				        </tr>
+				        <tr> 
+				            <td>2</td> 
+				            <td id = "fcoilbit2">
+								<select id="fcoil2select">        
+									<option value="1" >ON</option>
+									<option value="0">OFF</option>
+								</select>
+								<button id = "fcoilbit2button" class="button">Set</button>
+							</td>
+				        </tr> 
+				        <tr> 
+				            <td>3</td> 
+				            <td id = "fcoilbit3">
+								<select id="fcoil3select">        
+									<option value="1" >ON</option>
+									<option value="0">OFF</option>
+								</select>
+								<button id = "fcoilbit3button" class="button">Set</button>
+							</td>
+							</tr> 
+						<tr> 
+					        <td>4</td> 
+					        <td id = "fcoilbit4">
+								<select id="fcoil4select">        
+									<option value="1" >ON</option>
+									<option value="0">OFF</option>
+								</select>
+								<button id = "fcoilbit4button" class="button">Set</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div class="thirdRow">
+				<div id="fc06">
+					<label>Preset Single Register (FC=06)</label><br><br>
+					
+					<table class="responstable"> 
+				        <tr> 
+				            <th>Register</th> 
+				            <th>Value</th>  
+				        </tr> 
+				        <tr> 
+				            <td>1</td> 
+				            <td id = "presetreg1">-
+								<input type="text" id="presetreg1input">
+								<button id = "presetreg1button" class="button">Set</button>
+							</td>
+				        </tr> 
+				        <tr> 
+				            <td>2</td> 
+				            <td id = "presetreg2">-
+								<input type="text" id="presetreg2input">
+								<button id = "presetreg2button" class="button">Set</button>
+							</td>
+				        </tr> 
+				        <tr> 
+				            <td>3</td> 
+				            <td id = "presetreg3">-
+								<input type="text" id="presetreg3input">
+								<button id = "presetreg3button" class="button">Set</button>
+							</td>
+						</tr> 
+						<tr> 
+				            <td>4</td> 
+				            <td id = "presetreg4">-
+								<input type="text" id="presetreg4input">
+								<button id = "presetreg4button" class="button">Set</button>
+							</td>
+				        </tr> 
+					</table>
+				</div>
+
+				<div id="fc15">
+					<label>Force Multiple Coils (FC=15) <button id = "fmultibutton" class="button">Set</button></label>
+					<br><br>
+					<table class="responstable"> 
+				        <tr> 
+				            <th>Bit</th> 
+				            <th>Value</th>  
+				        </tr> 
+				        <tr> 
+				            <td>1</td> 
+				            <td id = "fmultibit1">
+								<select id="fmcoil1select">        
+									<option value="1" >ON</option>
+									<option value="0">OFF</option>
+								</select>
+							</td> 
+				        </tr> 
+				        <tr> 
+				            <td>2</td> 
+				            <td id = "fmultibit2">
+								<select id="fmcoil2select">        
+									<option value="1" >ON</option>
+									<option value="0">OFF</option>
+								</select>
+							</td>
+				        </tr> 
+				        <tr> 
+				            <td>3</td> 
+				            <td id = "fmultibit3">
+								<select id="fmcoil3select">        
+									<option value="1" >ON</option>
+									<option value="0">OFF</option>
+								</select>
+							</td>
+						</tr> 
+						<tr> 
+				            <td>4</td> 
+				            <td id = "fmultibit4">
+								<select id="fmcoil4select">        
+									<option value="1" >ON</option>
+									<option value="0">OFF</option>
+								</select>
+							</td>
+						</tr> 
+					</table>
+				</div>
+
+				<div id="fc16">
+					<label>Preset Multiple Registers(FC=16) <button id = "presetmulbutton" class="button">Set</button></label><br><br>
+					
+					<table class="responstable"> 
+				        <tr> 
+				            <th>Register</th> 
+				            <th>Value</th>  
+				        </tr> 
+				        <tr> 
+				            <td>1</td> 
+				            <td id = "presetmulreg1">-
+								<input type="text" id="presetmulreg1input">
+							</td>
+				        </tr> 
+				        <tr> 
+				            <td>2</td> 
+				            <td id = "presetmulreg2">-
+								<input type="text" id="presetmulreg2input">
+							</td>
+				        </tr> 
+				        <tr> 
+				            <td>3</td> 
+				            <td id = "presetmulreg3">-
+								<input type="text" id="presetmulreg3input">
+							</td>
+						</tr> 
+						<tr> 
+				            <td>4</td> 
+				            <td id = "presetmulreg4">-
+								<input type="text" id="presetmulreg4input">
+							</td>
+				        </tr> 
+					</table>
+				</div>
+			</div>
+		</div>
+
+</body>
+<script>
+	$('#coilstatusbutton').click(function(e){
+		e.preventDefault();
+		$.get('/modbusupdate?funcode=1&numbreg=4', function(data){
+			console.log(data);
+            document.getElementById("coilbit1").innerHTML = data["reg1"];
+            document.getElementById("coilbit2").innerHTML = data["reg2"];
+            document.getElementById("coilbit3").innerHTML = data["reg3"];
+            document.getElementById("coilbit4").innerHTML = data["reg4"];
+            
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+		});
+	});
+
+    $('#inputstatusbutton').click(function(e){
+		e.preventDefault();
+		$.get('/modbusupdate?funcode=2&numbreg=4', function(data){
+			console.log(data);
+            document.getElementById("statusbit1").innerHTML = data["reg1"];
+            document.getElementById("statusbit2").innerHTML = data["reg2"];
+            document.getElementById("statusbit3").innerHTML = data["reg3"];
+            document.getElementById("statusbit4").innerHTML = data["reg4"];
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+		});
+    });
+    
+    $('#holdingregbutton').click(function(e){
+		e.preventDefault();
+		$.get('/modbusupdate?funcode=3&numbreg=4', function(data){
+			console.log(data);
+            document.getElementById("holdingreg1").innerHTML = data["reg1"];
+            document.getElementById("holdingreg2").innerHTML = data["reg2"];
+            document.getElementById("holdingreg3").innerHTML = data["reg3"];
+            document.getElementById("holdingreg4").innerHTML = data["reg4"];
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+		});
+    });
+    
+    $('#inputregbutton').click(function(e){
+		e.preventDefault();
+		$.get('/modbusupdate?funcode=4&numbreg=4', function(data){
+			console.log(data);
+            document.getElementById("inputreg1").innerHTML = data["reg1"];
+            document.getElementById("inputreg2").innerHTML = data["reg2"];
+            document.getElementById("inputreg3").innerHTML = data["reg3"];
+            document.getElementById("inputreg4").innerHTML = data["reg4"];
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+		});
+    });
+    
+    $('#fcoilbit1button').click(function(e){
+		e.preventDefault();
+		var e = document.getElementById("fcoil1select");
+        var strUser = e.options[e.selectedIndex].value;
+		$.get('/modbusupdate?funcode=5&numbreg=0&value='+strUser, function(data){
+            console.log(data);
+            
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+            alert("read coil status to see changes");
+		});
+    });
+
+    $('#fcoilbit2button').click(function(e){
+        e.preventDefault();
+        var e = document.getElementById("fcoil2select");
+        var strUser = e.options[e.selectedIndex].value;
+		$.get('/modbusupdate?funcode=5&numbreg=1&value='+strUser, function(data){
+			console.log(data);
+            
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+            alert("read coil status to see changes");
+		});
+    });
+
+    $('#fcoilbit3button').click(function(e){
+		e.preventDefault();
+		var e = document.getElementById("fcoil3select");
+        var strUser = e.options[e.selectedIndex].value;
+		$.get('/modbusupdate?funcode=5&numbreg=2&value='+strUser, function(data){
+			console.log(data);
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+            alert("read coil status to see changes");
+		});
+    });
+
+    $('#fcoilbit4button').click(function(e){
+		e.preventDefault();
+		var e = document.getElementById("fcoil4select");
+        var strUser = e.options[e.selectedIndex].value;
+		$.get('/modbusupdate?funcode=5&numbreg=3&value='+strUser, function(data){
+			console.log(data);
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+            alert("read coil status to see changes");
+		});
+    });
+
+    $('#presetreg1button').click(function(e){
+		e.preventDefault();
+		var strUser = document.getElementById("presetreg1input").value;
+		$.get('/modbusupdate?funcode=6&numbreg=0&value='+strUser, function(data){
+            console.log(data);
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+            alert("read holding register to see changes");
+		});
+    });
+
+    $('#presetreg2button').click(function(e){
+		e.preventDefault();
+		var strUser = document.getElementById("presetreg2input").value;
+		$.get('/modbusupdate?funcode=6&numbreg=1&value='+strUser, function(data){
+            console.log(data);
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+            alert("read holding register to see changes");
+		});
+    });
+
+    $('#presetreg3button').click(function(e){
+		e.preventDefault();
+		var strUser = document.getElementById("presetreg3input").value;
+		$.get('/modbusupdate?funcode=6&numbreg=2&value='+strUser, function(data){
+            console.log(data);
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+            alert("read holding register to see changes");
+		});
+    });
+
+    $('#presetreg4button').click(function(e){
+		e.preventDefault();
+		var strUser = document.getElementById("presetreg4input").value;
+		$.get('/modbusupdate?funcode=6&numbreg=3&value='+strUser, function(data){
+            console.log(data);
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+            alert("read holding register to see changes");
+		});
+    });
+
+    $('#fmultibutton').click(function(e){
+        e.preventDefault();
+        var e1 = document.getElementById("fmcoil1select");
+        var strUser1 = e1.options[e1.selectedIndex].value;
+        
+        var e2 = document.getElementById("fmcoil2select");
+        var strUser2 = e2.options[e2.selectedIndex].value;
+        
+        var e3 = document.getElementById("fmcoil3select");
+        var strUser3 = e3.options[e3.selectedIndex].value;
+        
+        var e4 = document.getElementById("fmcoil4select");
+        var strUser4 = e4.options[e4.selectedIndex].value;
+
+		$.get('/modbusupdate?funcode=15&numbreg=4&value1='+strUser1+'&value2='+strUser2 +'&value3='+strUser3 + '&value4='+strUser4, function(data){
+			console.log(data);
+            
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+            alert("read coil status to see changes");
+		});
+    });
+
+    $('#presetmulbutton').click(function(e){
+		e.preventDefault();
+        var strUser1 = document.getElementById("presetmulreg1input").value;
+        var strUser2 = document.getElementById("presetmulreg2input").value;
+        var strUser3 = document.getElementById("presetmulreg3input").value;
+        var strUser4 = document.getElementById("presetmulreg4input").value;
+        
+        $.get('/modbusupdate?funcode=16&numbreg=4&value1='+strUser1+'&value2='+strUser2 +'&value3='+strUser3 + '&value4='+strUser4, function(data){
+            console.log(data);
+            document.getElementById("lastfunccode").innerHTML = data["funcode"];
+            document.getElementById("lastcommand").innerHTML = data["TxCMD"];
+            document.getElementById("lastresponse").innerHTML = data["RxCMD"];
+            document.getElementById("lasterror").innerHTML = data["Error"];
+            alert("read holding register to see changes");
+		});
+    });
+
+</script>
+</html>

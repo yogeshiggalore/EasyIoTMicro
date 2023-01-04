@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ESP32 Web Server</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="data:,">
+	<script src="\jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="\ledweb.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  <style>
+    html {
+     font-family: Arial;
+     display: inline-block;
+     margin: 0px auto;
+     text-align: center;
+    }
+    h2 { font-size: 3.0rem; }
+    p { font-size: 3.0rem; }
+    .units { font-size: 1.2rem; }
+    .dht-labels{
+      font-size: 1.5rem;
+      vertical-align:middle;
+      padding-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+	<h1>ESP32 Web Server</h1>
+	<p>
+		<i class="fas fa-thermometer-half" style="color:#059e8a;"></i> 
+		<span class="dht-labels">Temperature</span> 
+		<span id="temperature"></span>
+		<sup class="units">&deg;C</sup>
+	</p>
+	<p>
+		<i class="fas fa-tint" style="color:#00add6;"></i> 
+		<span class="dht-labels">Humidity</span>
+		<span id="humidity"></span>
+		<sup class="units">%</sup>
+	</p>
+</body>
+<script>
+	setInterval(function() {
+		GetValues();
+	}, 5000);
+
+	$('#ledbuttonon').click(function(e){
+		e.preventDefault();
+		$.get('/ledupdate?state=1', function(data){
+			console.log(data);
+			console.log(data["LEDState"]);
+			document.getElementById("ledstate").innerHTML = data["LEDState"];
+		});
+	});
+
+	$('#ledbuttonoff').click(function(e){
+		e.preventDefault();
+		$.get('/ledupdate?state=0', function(data){
+			console.log(data);
+			console.log(data["LEDState"]);
+			document.getElementById("ledstate").innerHTML = data["LEDState"];
+		});
+	});
+
+	var json_data = 0;
+	var tableentry = new Array();
+
+	function GetValues() {
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						json_data = JSON.parse(this.responseText);
+						tableentry.push(["Name", "Value"]);
+						var myList = [];
+						for(var i in json_data){
+							myList.push([i, json_data [i]]);
+						}
+						console.log(json_data);
+						document.getElementById("temperature").innerHTML = json_data["temp"];
+						document.getElementById("humidity").innerHTML = json_data["humd"];
+					}
+				};
+				xhttp.open("GET", "/dhtupdate", false);
+				xhttp.send();
+			}
+</script>
+</html>

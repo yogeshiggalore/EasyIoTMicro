@@ -1,0 +1,115 @@
+EasyIoTPiCo concepts:
+
+01. GPIO
+02. Timer 
+03. PWM
+04. Memory
+05. UART
+06. ADC
+07. DHT11
+08. I2C
+09. WiFi
+10. WebServer
+11. FileSystem
+12. Internet
+13. MQTT
+14. Alexa
+15. Telegram
+16. Thingspeak
+17. AdafruitIO
+18. Modbus
+19. ESPNOW
+20. OTA
+
+Projects:
+
+GPIO:
+    PiCo_01_01: LED blinking with firmware delay.
+    PiCo_01_02: Switch input to turn on/off LED.
+    PiCo_01_03: Two LED blinking with firmware delay.
+    
+Timer:
+    PiCo_02_01: LED blinking with timer.
+    PiCo_02_02: Two LED blinking with timer.
+
+PWM:
+    PiCo_03_01: LED fadin fadeout
+
+Memory:
+    PiCo_04_01: Store LED status to Memory
+
+UART:
+    PiCo_05_01: Send sample string to PC 
+    
+ADC:
+    PiCo_06_01: send LM35 reading to PC using UART
+
+DHT11:
+    PiCo_07_01: Read DHT11 and send these values to UART
+
+I2C:
+    PiCo_08_01: Display EasyIoTPiCo on oled
+    PiCo_08_02: Display LED status on oled
+    PiCo_08_03: Display LM35 and DHT22 on oled
+
+WiFi and Webserver:
+    PiCo_09_01: Control LED on/off using Webserver using accesspoint mode
+    PiCo_09_02: Control LED on/off using Webserver using station mode
+
+SPIFFS:
+    PiCo_10_01: Webserver using FileSystem
+    PiCo_10_02: WiFi configuration using webserver and FileSystem
+
+Internet:
+    PiCo_11_01: NTP time display on oled
+    PiCo_11_02: clock disply on oled
+
+MQTT:
+    PiCo_12_01: LED control using MQTT  
+    PiCo_12_02: LM35 and DHT11 reading values MQTT
+
+Alexa:
+    PiCo_13_01: LED controlling using Alexa
+
+Telegram:
+    PiCo_14_01: LED control using Telegram.
+    PiCo_14_03: LM35 and DHT11 reading using Telegram
+
+Thingspeak:
+    PiCo_15_01: LED control using Thingspeak
+    PiCo_15_02: LM35 and DHT11 rewading using Thingspeak
+
+AdafruitIO:
+    PiCo_16_01: LED control using AdafruitIO
+    PiCo_16_02: LM35 and DHT11 rewading using AdafruitIO
+
+Modbus:
+    PiCo_17_01: Modbus RTU master
+    PiCo_17_02: Modbus RTU slave
+    PiCo_17_03: Modbus ASCII master
+    PiCo_17_04: Modbus ASCII slave
+    PiCo_17_05: Modbus TCPIP master
+    PiCo_17_06: Modbus TCPIP slave
+
+ESPNOW:
+    PiCo_18_01 : ESPNOW example
+
+OTA:
+    PiCo_19_01: OTA IP
+    PiCo_19_02: OTA webserver
+    PiCo_19_03: OTA http
+
+Theory meterial
+GPIO
+Timer
+PWM
+UART
+I2C
+ADC
+WiFi
+Webserver
+MQTT
+Modbus
+OTA
+microcontroller
+microprocessor

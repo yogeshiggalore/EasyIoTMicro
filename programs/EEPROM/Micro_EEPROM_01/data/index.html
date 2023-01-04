@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ESP32 Web Server</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="data:,">
+	<script src="\jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="\ledweb.css">
+</head>
+<body>
+	<h1>ESP32 Web Server</h1>
+	<p>GPIO state:<strong id = "ledstate">OFF</strong></p>
+	<p>
+		<button id = "ledbuttonon" class="button">ON</button>
+		<button id = "ledbuttonoff" class="button button2">OFF</button>
+  	</p>
+</body>
+<script>
+	var json_data;
+
+	$('#ledbuttonon').click(function(e){
+		e.preventDefault();
+		$.get('/ledupdate?state=1', function(data){
+			console.log(data);
+			console.log(data["LEDState"]);
+			document.getElementById("ledstate").innerHTML = data["LEDState"];
+		});
+	});
+
+	$('#ledbuttonoff').click(function(e){
+		e.preventDefault();
+		$.get('/ledupdate?state=0', function(data){
+			console.log(data);
+			//json_data =  $.parseJSON(data);
+			console.log(data["LEDState"]);
+			document.getElementById("ledstate").innerHTML = data["LEDState"];
+		});
+	});
+</script>
+</html>
